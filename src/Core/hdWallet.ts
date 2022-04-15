@@ -1,17 +1,16 @@
-import { decryptPk, encryptPk } from 'Coin/FIL'
 import { Address } from 'Coin/types'
 import * as BIP32Factory from 'bip32'
 import { generateMnemonic, mnemonicToSeedSync } from 'bip39'
 import AccountStore from 'db/account'
 import { ICoinInfo } from 'global/coinInfo'
+import { decryptPk, encryptPk } from 'utils/crypto'
 
 import { IAccount, ICrypto, Meta } from './types'
 
 class HdWallet {
-  private _mnemonic: string
+  private static _instance: HdWallet
   private _rootNode: BIP32Factory.BIP32Interface
   constructor(mnemonic: string, passpharse: string, meta: Meta) {
-    this._mnemonic = mnemonic
     this._rootNode = BIP32Factory.fromSeed(
       mnemonicToSeedSync(mnemonic, passpharse)
     )
@@ -31,11 +30,8 @@ class HdWallet {
 
   static newWallet(password: string, meta: Meta) {
     const menmonic = generateMnemonic()
-    return new HdWallet(menmonic, password, meta)
-  }
-
-  get mnemonic() {
-    return this._mnemonic
+    this._instance = new HdWallet(menmonic, password, meta)
+    return this._instance
   }
 
   deriveCoin(coinInfo: ICoinInfo, add: Address) {
