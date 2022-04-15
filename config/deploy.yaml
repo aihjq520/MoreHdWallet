@@ -1,0 +1,35 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: _projectName
+  namespace: _namespace_var_
+spec:
+  selector:
+    matchLabels:
+      app: _projectName
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: _projectName
+    spec:
+      containers:
+        - name: _projectName
+          image: _image_name_var_
+          env:
+            - name: APIENV
+              value: _APIENV_
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: _projectName
+  namespace: _namespace_var_
+spec:
+  type: NodePort
+  selector:
+    app: _projectName
+  ports:
+    - protocol: TCP
+      port: 80
+      nodePort: _external_port_
