@@ -1,0 +1,64 @@
+image: node:14.18.0
+
+before_script:
+  - apt-get update -qq && apt-get install
+
+stages:
+  - build
+  - push_image
+  - deploy
+
+Build:
+  stage: build
+  only:
+    - dev
+    - main
+    - stable
+    - merge_requests
+  before_script:
+    - yarn config set cache-folder .yarn
+    - yarn --registry https://registry.npm.taobao.org/
+  script:
+    - export PROROOT=`pwd`
+    - cd $PROROOT/config
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+
+Push_image:
+  image: docker:18.03.0
+  stage: push_image
+  only:
+    - stable
+    - main
+    - dev
+  before_script:
+    - export PROROOT=`pwd`
+  script:
+    - docker build -t xl.image:5000/isolated-island-web_${CI_COMMIT_SHA} -f config/Dockerfile .
+    - docker push xl.image:5000/isolated-island-web_${CI_COMMIT_SHA}
+
+Deploy:
+  image: roffe/kubectl
+  stage: deploy
+  only:
+    - main
+    - dev
+  before_script:
+    - if [[ "${CI_COMMIT_REF_NAME}" == "dev" ]]; then export PROENV=[object Object]-dev; export PROPORT=35000; fi;
+    - if [[ "${CI_COMMIT_REF_NAME}" == "main" ]]; then export PROENV=[object Object]-test; export PROPORT=35001; fi
+    - export PROROOT=`pwd`
+    - mkdir -p tmp
+    - cp $PROROOT/config/deploy.yaml $PROROOT/tmp/deploy.yaml
+    - cd $PROROOT/tmp
+    - sed -i "s/_image_hd-wallet_var_/xl.image:5000\/isolated-island-web_${CI_COMMIT_SHA}/g" deploy.yaml
+    - sed -i "s/_hd-walletspace_var_/${PROENV}/g" deploy.yaml
+    - sed -i "s/_db_env_var_/\"${PROENV}\"/g" deploy.yaml
+    - sed -i "s/_docker_env_var_/\"1\"/g" deploy.yaml
+    - sed -i "s/_run_env_var_/\"${PROENV}\"/g" deploy.yaml
+    - sed -i "s/_external_port_/${PROPORT}/g" deploy.yaml
+  script:
+    - cat deploy.yaml
+    - kubectl version --insecure-skip-tls-verify=true --server=${K8S_ADDR} --token=${K8S_TOKEN}
+    - kubectl apply -f deploy.yaml --insecure-skip-tls-verify=true --server=${K8S_ADDR} --token=${K8S_TOKEN}
