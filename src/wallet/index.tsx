@@ -2,8 +2,8 @@ import FilAddress from 'Coin/FIL/address'
 import { NetWork } from 'Coin/FIL/types'
 import HdWallet from 'Core/hdWallet'
 import { Meta } from 'Core/types'
+import { generateMnemonic } from 'bip39'
 import AccountStore from 'db/account'
-import { db } from 'db/storage'
 import COIN_INFO from 'global/coinInfo'
 import { decryptPk } from 'utils/crypto'
 
@@ -12,14 +12,16 @@ const WalletApi = {
     const meta = {
       walletName
     }
-    const wallet = HdWallet.newWallet(password, meta)
+    const menmonic =
+      'equip will roof matter pink blind book anxiety banner elbow sun young'
+    const wallet = new HdWallet(menmonic, password, meta)
     const deriveParams = COIN_INFO.find(
-      (item) => item.coin === 'FILECOIN' && item.network === NetWork.Main //todo币种不能写死要选择
+      (item) => item.coin === 'FILECOIN' && item.network === NetWork.Main //todo币种不能写死
     )
     if (deriveParams) {
       wallet.deriveCoin(deriveParams, new FilAddress(NetWork.Main))
     }
-    return wallet.mnemonic
+    return menmonic
   },
 
   importWallet(mnemonic: string, passpharse: string, meta: Meta) {

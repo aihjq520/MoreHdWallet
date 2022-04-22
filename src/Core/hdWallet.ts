@@ -12,7 +12,7 @@ class HdWallet {
   private _rootNode: BIP32Factory.BIP32Interface
   constructor(mnemonic: string, passpharse: string, meta: Meta) {
     this._rootNode = BIP32Factory.fromSeed(
-      mnemonicToSeedSync(mnemonic, passpharse)
+      mnemonicToSeedSync(mnemonic, 'Password')
     )
     const { encData, iv, salt } = encryptPk(mnemonic, passpharse)
     const store: ICrypto = {
@@ -28,17 +28,12 @@ class HdWallet {
     AccountStore.saveCrypto(store)
   }
 
-  static newWallet(password: string, meta: Meta) {
-    const menmonic = generateMnemonic()
-    this._instance = new HdWallet(menmonic, password, meta)
-    return this._instance
-  }
-
   deriveCoin(coinInfo: ICoinInfo, add: Address) {
     const childNode = this._rootNode.derivePath(coinInfo.derivation_path)
     const privateKey = childNode?.privateKey
     const publicKey = childNode.publicKey
     const address = add.fromPublicKey(publicKey)
+    console.log(address)
     const account: IAccount = {
       address,
       ...coinInfo
@@ -55,6 +50,8 @@ class HdWallet {
     if (!crypto) return ''
     return decryptPk(crypto, password)
   }
+
+  // async signTransaction() {}
 }
 
 export default HdWallet

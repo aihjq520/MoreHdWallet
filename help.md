@@ -1,4 +1,4 @@
-- bip39
+- bip39,bip32,bip44
 
 - sha256
 
@@ -24,6 +24,7 @@ example ethers.Js
 
 https://github.com/ethers-io/ethers.js/blob/master/packages/json-wallets/src.ts/keystore.ts#L227
 代码示例
+P=kG
 
 - metamask
   没有导出 keyStore 功能，只有导出私钥/助记词功能
@@ -34,7 +35,7 @@ https://github.com/ethers-io/ethers.js/blob/master/packages/json-wallets/src.ts/
 
 - scrypt
 
-- aes 加密
+- aes-ctr-128 加密
   -- CTR 块模式 1.生成密钥： 先生成 256 位的 key，派生密钥由 64 个十六进制(32 个字节组成) KBPDF(密码明文，salt)再使用 hex 编码
   2.iv (需要存储)
   3.key

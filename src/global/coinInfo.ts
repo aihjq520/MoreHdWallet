@@ -10,13 +10,13 @@ export interface ICoinInfo {
 export const COIN_INFO = [
   {
     coin: 'FILECOIN',
-    derivation_path: "m/44'/461'/0'/0/0",
+    derivation_path: "m/44'/461'/0/0/0",
     curve: Protocol.SECP256K1,
     network: NetWork.Main
   },
   {
     coin: 'FILECOIN',
-    derivation_path: "m/44'/461'/0'/0/0",
+    derivation_path: "m/44'/461'/0/0/0",
     curve: Protocol.SECP256K1,
     network: NetWork.Test
   }

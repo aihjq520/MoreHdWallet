@@ -19,6 +19,7 @@
     "@types/file-saver": "^2.0.5",
     "@types/uuid": "^8.3.4",
     "axios": "^0.24.0",
+    "base32-encode": "^2.0.0",
     "bip32": "2.0.5",
     "bip39": "^3.0.3",
     "bip44-constants": "^110.0.0",

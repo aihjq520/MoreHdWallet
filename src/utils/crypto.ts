@@ -29,7 +29,6 @@ export const decryptPk = (mesg: ICrypto, password: string) => {
   const key = PBKDF2(password, salt, {
     keySize: 128 / 32 //256bit
   })
-  // const key = '123456'
   const cipherData = enc.Base64.parse(cipherText).toString(enc.Utf8)
   const decrypedData = AES.decrypt(cipherData, key, {
     mode: mode.CTR,

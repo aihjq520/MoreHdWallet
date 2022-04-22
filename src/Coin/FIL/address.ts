@@ -1,4 +1,5 @@
 import { Address } from 'Coin/types'
+import base32Encode from 'base32-encode'
 import blakejs from 'blakejs'
 
 import { encode } from '../../utils/base32'
@@ -27,8 +28,12 @@ class FilAddress implements Address {
     const protocolByte = Buffer.alloc(1)
     protocolByte[0] = proto
     const checkSum = this.checkSum(Buffer.concat([protocolByte, payload]))
-    const encodeAddress = encode(
-      Buffer.concat([payload, Buffer.from(checkSum)])
+    const encodeAddress = base32Encode(
+      Buffer.concat([payload, Buffer.from(checkSum)]),
+      'RFC4648',
+      {
+        padding: false
+      }
     )
     return `${this._network}${proto}${encodeAddress}`
   }
