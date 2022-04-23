@@ -2,13 +2,16 @@ import { IAccount, ICrypto } from 'Core/types'
 import { db } from 'db/storage'
 
 class WalletStore {
-  constructor() {
-    db.keyStore.add({
-      crypto: undefined,
-      accounts: []
-    })
+  init() {
+    const account = this.getAccount()
+    const crypto = this.getCrypto()
+    if (!account && !crypto) {
+      db.keyStore.add({
+        crypto: undefined,
+        accounts: []
+      })
+    }
   }
-
   async getAccount() {
     const rows = await db.keyStore.get(1)
     return rows?.accounts
@@ -29,7 +32,7 @@ class WalletStore {
     ) {
       accountArray.push(account)
       db.keyStore.update(1, {
-        accounts: accountArray
+        accounts: [account]
       })
     }
   }

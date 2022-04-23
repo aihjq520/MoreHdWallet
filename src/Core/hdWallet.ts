@@ -1,19 +1,16 @@
+import * as secp from '@noble/secp256k1'
+
 import { Address } from 'Coin/types'
 import * as BIP32Factory from 'bip32'
-import { generateMnemonic, mnemonicToSeedSync } from 'bip39'
+import { mnemonicToSeedSync } from 'bip39'
 import AccountStore from 'db/account'
 import { ICoinInfo } from 'global/coinInfo'
 import { decryptPk, encryptPk } from 'utils/crypto'
-import * as secp from "@noble/secp256k1";
+
 import { IAccount, ICrypto, Meta } from './types'
 
 class HdWallet {
-  private static _instance: HdWallet
-  private _rootNode: BIP32Factory.BIP32Interface
-  constructor(mnemonic: string, passpharse: string, meta: Meta) {
-    this._rootNode = BIP32Factory.fromSeed(
-      mnemonicToSeedSync(mnemonic)
-    )
+  static async fromMnemonic(mnemonic: string, passpharse: string, meta: Meta) {
     const { encData, iv, salt } = encryptPk(mnemonic, passpharse)
     const store: ICrypto = {
       version: 1,
@@ -25,15 +22,16 @@ class HdWallet {
       },
       meta
     }
-    AccountStore.saveCrypto(store)
+    await AccountStore.saveCrypto(store)
   }
 
-  deriveCoin(coinInfo: ICoinInfo, add: Address) {
-    const childNode = this._rootNode.derivePath(coinInfo.derivation_path)
-    
+  static async deriveCoin(coinInfo: ICoinInfo, password: string, add: Address) {
+    const crypto = await AccountStore.getCrypto()
+    const mnemonic = decryptPk(crypto!, password)
+    const rootNode = BIP32Factory.fromSeed(mnemonicToSeedSync(mnemonic))
+    const childNode = rootNode.derivePath(coinInfo.derivation_path)
     const privateKey = childNode?.privateKey
-    
-    const publicKey =  Buffer.from(secp.getPublicKey(privateKey!,false))
+    const publicKey = Buffer.from(secp.getPublicKey(privateKey!, false))
     const address = add.fromPublicKey(publicKey)
     console.log(address)
     const account: IAccount = {
@@ -43,11 +41,10 @@ class HdWallet {
       // publicKey
     }
     AccountStore.saveAccount(account)
-    //存储account
     return account
   }
 
-  async exportMnemonic(password: string) {
+  static async exportMnemonic(password: string) {
     const crypto = await AccountStore.getCrypto()
     if (!crypto) return ''
     return decryptPk(crypto, password)

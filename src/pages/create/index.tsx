@@ -8,14 +8,13 @@ const CreateWallet = () => {
   const [mnemonic, setMnemonic] = useState('')
   const [password, setPassword] = useState('')
   const [name, setWalletName] = useState('')
-  const create = () => {
-    setMnemonic(WalletApi.create('12345678', name))
+  const create = async () => {
+    setMnemonic(await WalletApi.create('12345678', name))
   }
   const useGetKeyStore = () => {
     const keyArr = useLiveQuery(() => db.keyStore.toArray())
     if (keyArr && keyArr?.length > 0 && keyArr[0]) {
       console.log(keyArr[0])
-      // decryptPk(keyArr[0], '123456')
       return keyArr[0]
     }
     return null

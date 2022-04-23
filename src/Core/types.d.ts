@@ -1,4 +1,4 @@
-import { NetWork } from './../Coin/FIL/types'
+import { NetWork } from '//Coin/FIL/types'
 
 export interface Meta {
   walletName: string
@@ -17,4 +17,17 @@ export interface ICrypto {
   cipherparams: ICryptoParams
   version: number
   meta: Meta
+}
+
+export interface UnSignedMsg {
+  from: string
+  to: string
+  nonce: number
+  value: string
+  gas_limit: number
+  gas_fee_ap: string
+  gas_premium: string
+  method: number
+  Params: string
+  Version: string
 }
