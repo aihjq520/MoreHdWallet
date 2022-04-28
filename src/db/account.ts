@@ -2,9 +2,10 @@ import { IAccount, ICrypto } from 'Core/types'
 import { db } from 'db/storage'
 
 class WalletStore {
-  init() {
-    const account = this.getAccount()
-    const crypto = this.getCrypto()
+  async init() {
+    const account = await this.getAccount()
+    const crypto = await this.getCrypto()
+    console.log(account)
     if (!account && !crypto) {
       db.keyStore.add({
         crypto: undefined,
@@ -38,7 +39,8 @@ class WalletStore {
   }
 
   async saveCrypto(crypto: ICrypto) {
-    db.keyStore.update(1, {
+    console.log(crypto)
+    await db.keyStore.update(1, {
       crypto
     })
   }
