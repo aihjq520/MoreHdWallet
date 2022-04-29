@@ -22,4 +22,79 @@ export const COIN_INFO = [
   }
 ]
 
+export const COIN_LIST = [
+  {
+    id: 0,
+    name: 'Bitcoin',
+    abb: 'BTC',
+    icon: 'src/assets/icons/bitcoin.png'
+  },
+  {
+    id: 60,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 61,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 62,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 63,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 64,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 65,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 66,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 67,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 68,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 69,
+    name: 'Ethereum',
+    abb: 'ETH',
+    icon: 'src/assets/icons/ethereum.png'
+  },
+  {
+    id: 461,
+    name: 'Filecoin',
+    abb: 'FIL',
+    icon: 'src/assets/icons/filecoin.png'
+  }
+]
+
 export default COIN_INFO

@@ -10,13 +10,15 @@ const TNavBar = ({
   height = 12,
   hasBack = true,
   color = 'default',
-  right
+  right,
+  className
 }: {
   title?: string
   height?: number
   hasBack?: boolean
   color?: ColorType
   right?: React.ReactNode
+  className?: string
 }) => {
   const navigate = useNavigate()
 
@@ -26,9 +28,9 @@ const TNavBar = ({
       style={{
         '--height': `${height * 0.25}rem`
       }}
-      className={`fixed z-50 w-screen ${
+      className={`fixed top-0 z-50 w-screen ${
         isDefaultColor ? 'bg-white' : 'bg-theme text-white'
-      }`}
+      } ${className}`}
       backArrow={hasBack}
       onBack={() => navigate(-1)}
       right={right}

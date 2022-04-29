@@ -1,5 +1,3 @@
-import { useMemo, useState } from 'react'
-
 import { Button, Form, Input } from 'antd-mobile'
 import { FormItemProps } from 'antd-mobile/es/components/form'
 import TNavBar from 'components/TNavBar'
@@ -7,28 +5,10 @@ import TNavBar from 'components/TNavBar'
 import useCreateHooks from './hooks'
 
 const CreateWallet = () => {
-  const { create, mnemonic } = useCreateHooks()
-  interface IForm {
-    name: string
-    password: string
-    againPwd: string
-  }
-  const initForm: IForm = {
-    name: '',
-    password: '',
-    againPwd: ''
-  }
-
-  const [form] = Form.useForm<IForm>()
-
-  const value = form.getFieldsValue()
-
-  const onSubmit = () => {
-    create(value.password, value.name)
-  }
+  const { form, initForm, onSubmit } = useCreateHooks()
 
   const rules: {
-    [key in keyof IForm]?: FormItemProps['rules']
+    [key in keyof typeof initForm]?: FormItemProps['rules']
   } = {
     name: [{ required: true, message: '请输入身份钱包' }],
     password: [{ required: true, message: '请输入钱包密码' }],
@@ -95,8 +75,6 @@ const CreateWallet = () => {
             <Input placeholder="密码提示（可选）" type="password" />
           </Form.Item>
         </Form>
-        <div>选择开启币种：FIL</div>
-        {mnemonic && <div>你的助记是: {mnemonic}</div>}
       </div>
     </>
   )

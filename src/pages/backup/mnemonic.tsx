@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Button } from 'antd-mobile'
 import TNavBar from 'components/TNavBar'
@@ -20,25 +20,12 @@ const CLASS_LIST = [
 ]
 
 const Mnemonic = () => {
-  const list = [
-    'antenna',
-    'trend',
-    'lounge',
-    'siren',
-    'thrive',
-    'nerve',
-    'asthma',
-    'season',
-    'despair',
-    'brush',
-    'extra',
-    'parrot'
-  ]
-
   const navigate = useNavigate()
+  const location = useLocation()
+  const { mnemonic } = location.state as { mnemonic: string }
 
   const onBtnClick = () => {
-    navigate(ROUTE_BACKUP_MNEMONIC_VERIFY)
+    navigate(ROUTE_BACKUP_MNEMONIC_VERIFY, { state: location.state })
   }
 
   return (
@@ -50,7 +37,7 @@ const Mnemonic = () => {
           请按顺序抄写助记词，确保备份正确。
         </div>
         <div className="grid grid-cols-3 my-8 ">
-          {list.map((m, i) => (
+          {mnemonic.split(' ').map((m, i) => (
             <div
               className={`px-3 py-5 relative border bg-gray-50 text-base ${CLASS_LIST[i]}`}
               key={m}

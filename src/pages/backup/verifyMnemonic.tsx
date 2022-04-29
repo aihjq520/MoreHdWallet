@@ -1,45 +1,33 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { Button, Toast } from 'antd-mobile'
+import { Button } from 'antd-mobile'
 import { CloseCircleFill } from 'antd-mobile-icons'
 import TNavBar from 'components/TNavBar'
 import Prompt from 'components/TNavBar/Prompt'
 import TToast from 'components/TToast'
 
-const VerifyMnemonic = () => {
-  const source = [
-    'antenna',
-    'trend',
-    'lounge',
-    'siren',
-    'thrive',
-    'nerve',
-    'asthma',
-    'season',
-    'despair',
-    'brush',
-    'extra',
-    'parrot'
-  ]
-
+const useHooks = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [random, setRandom] = useState<string[]>([])
+  const [active, setActive] = useState<string[]>([])
+  const [visible, setVisible] = useState(false)
 
+  const { mnemonic } = location.state as { mnemonic: string }
+
+  const source = useMemo<string[]>(() => mnemonic.split(' '), [mnemonic])
+
+  // 初始化，打乱助记词
   useEffect(() => {
     setRandom(
       source.slice(0).sort(() => {
         return 0.5 - Math.random()
       })
     )
-  }, [])
+  }, [source])
 
-  const [active, setActive] = useState<string[]>([])
-  const [visible, setVisible] = useState(false)
-
-  const onSelect = (item: string) => {
-    setActive((v) => [...v, item])
-  }
-
+  // 判断选择的助记词是否正确
   useEffect(() => {
     if (active.join('') !== source.slice(0, active.length).join('')) {
       setVisible(true)
@@ -48,8 +36,16 @@ const VerifyMnemonic = () => {
     setVisible(false)
   }, [active, source])
 
-  const navigate = useNavigate()
+  const isTrue = useCallback(() => {
+    return source.join('') === active.join('')
+  }, [active, source])
 
+  // 选择助记词
+  const onSelect = (item: string) => {
+    setActive((v) => [...v, item])
+  }
+
+  // 结束备份
   const onBtnClick = () => {
     TToast.successToast('备份成功')
     setTimeout(() => {
@@ -57,13 +53,32 @@ const VerifyMnemonic = () => {
     }, 1500)
   }
 
+  // 删除选中的助记词
   const onDeleteItem = (index: number) => {
     setActive((v) => v.filter((_, i) => i !== index))
   }
 
-  const isTrue = useCallback(() => {
-    return source.join('') === active.join('')
-  }, [active, source])
+  return {
+    random,
+    active,
+    visible,
+    isTrue,
+    onSelect,
+    onBtnClick,
+    onDeleteItem
+  }
+}
+
+const VerifyMnemonic = () => {
+  const {
+    visible,
+    active,
+    random,
+    isTrue,
+    onSelect,
+    onBtnClick,
+    onDeleteItem
+  } = useHooks()
 
   return (
     <>
