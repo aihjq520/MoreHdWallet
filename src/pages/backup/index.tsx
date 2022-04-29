@@ -17,7 +17,7 @@ const Backup = () => {
   }
 
   return (
-    <div className="relative w-screen h-screen">
+    <>
       <TNavBar />
       <div className="pt-12 w-full h-full">
         <div className="h-2/5"></div>
@@ -44,7 +44,7 @@ const Backup = () => {
         onClose={() => setVisible(false)}
         onAction={onAction}
       />
-    </div>
+    </>
   )
 }
 

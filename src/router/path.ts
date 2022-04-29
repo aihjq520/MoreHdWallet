@@ -1,4 +1,5 @@
 const ROUTE_ROOT = '/'
+const ROUTE_NO_CREATE = '/no'
 const ROUTE_WELCOME = '/welcome'
 const ROUTE_HOME = '/home'
 const ROUTE_CREATE_WALLET = '/createWallet'
@@ -11,6 +12,7 @@ const ROUTE_APPEND_COIN = '/appendCoin'
 
 export {
   ROUTE_ROOT,
+  ROUTE_NO_CREATE,
   ROUTE_WELCOME,
   ROUTE_HOME,
   ROUTE_CREATE_WALLET,

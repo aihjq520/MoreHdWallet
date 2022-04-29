@@ -1,9 +1,28 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { RightOutline } from 'antd-mobile-icons'
-import { ROUTE_CREATE_WALLET, ROUTE_IMPORT_WALLET } from 'router/path'
+import AccountStore from 'db/account'
+import {
+  ROUTE_CREATE_WALLET,
+  ROUTE_IMPORT_WALLET,
+  ROUTE_ROOT
+} from 'router/path'
 
 const Welcome = () => {
+  const navigate = useNavigate()
+
+  // 未创建身份钱包
+  useEffect(() => {
+    const asyncFn = async () => {
+      const account = await AccountStore.getAccount()
+      if (account) {
+        navigate(ROUTE_ROOT, { replace: true })
+      }
+    }
+    asyncFn()
+  }, [navigate])
+
   return (
     <div className="relative w-screen h-screen">
       <div className="h-3/5"></div>

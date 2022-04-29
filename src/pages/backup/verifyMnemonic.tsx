@@ -36,9 +36,13 @@ const useHooks = () => {
     setVisible(false)
   }, [active, source])
 
-  const isTrue = useCallback(() => {
+  const isAllTrue = useCallback(() => {
     return source.join('') === active.join('')
   }, [active, source])
+
+  const isTrue = (index: number) => {
+    return source[index] === active[index]
+  }
 
   // 选择助记词
   const onSelect = (item: string) => {
@@ -63,6 +67,7 @@ const useHooks = () => {
     active,
     visible,
     isTrue,
+    isAllTrue,
     onSelect,
     onBtnClick,
     onDeleteItem
@@ -75,6 +80,7 @@ const VerifyMnemonic = () => {
     active,
     random,
     isTrue,
+    isAllTrue,
     onSelect,
     onBtnClick,
     onDeleteItem
@@ -99,7 +105,9 @@ const VerifyMnemonic = () => {
               style={{ '--border-radius': '0.5rem' }}
               onClick={() => onDeleteItem(i)}
             >
-              <CloseCircleFill className="absolute -top-1 -right-1 text-sm text-red-500" />
+              {isTrue(i) ? null : (
+                <CloseCircleFill className="absolute -top-1 -right-1 text-sm text-red-500" />
+              )}
               {m}
             </Button>
           ))}
@@ -123,7 +131,7 @@ const VerifyMnemonic = () => {
           <Button
             block
             color="primary"
-            disabled={!isTrue()}
+            disabled={!isAllTrue()}
             onClick={() => onBtnClick()}
           >
             完成备份

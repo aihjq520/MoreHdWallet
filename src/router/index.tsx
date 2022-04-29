@@ -30,17 +30,17 @@ const Routers = () => {
     <Routes location={location}>
       <Route path={ROUTE_CREATE_WALLET} element={<CreateWallet />}></Route>
       <Route path={ROUTE_IMPORT_WALLET} element={<ImportWallet />}></Route>
-      <Route path={ROUTE_EXPORT} element={<ExportWallet />}></Route>
-      <Route path={ROUTE_BACKUP} element={<Backup />}></Route>
-      <Route path={ROUTE_BACKUP_MNEMONIC} element={<Mnemonic />}></Route>
-      <Route path={ROUTE_APPEND_COIN} element={<AppendCoin />}></Route>
-      <Route
-        path={ROUTE_BACKUP_MNEMONIC_VERIFY}
-        element={<VerifyMnemonic />}
-      ></Route>
       <Route path={ROUTE_WELCOME} element={<Welcome />}></Route>
       <Route path={ROUTE_ROOT} element={<Layout />}>
         <Route path={ROUTE_HOME} element={<Home />}></Route>
+        <Route path={ROUTE_EXPORT} element={<ExportWallet />}></Route>
+        <Route path={ROUTE_BACKUP} element={<Backup />}></Route>
+        <Route path={ROUTE_BACKUP_MNEMONIC} element={<Mnemonic />}></Route>
+        <Route path={ROUTE_APPEND_COIN} element={<AppendCoin />}></Route>
+        <Route
+          path={ROUTE_BACKUP_MNEMONIC_VERIFY}
+          element={<VerifyMnemonic />}
+        ></Route>
       </Route>
     </Routes>
   )
