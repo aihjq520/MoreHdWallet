@@ -8,6 +8,7 @@ import CreateWallet from 'pages/create'
 import ExportWallet from 'pages/export'
 import Home from 'pages/home'
 import Layout from 'pages/layout'
+import Welcome from 'pages/welcome'
 
 import {
   ROUTE_BACKUP,
@@ -16,12 +17,13 @@ import {
   ROUTE_CREATE,
   ROUTE_EXPORT,
   ROUTE_HOME,
-  ROUTE_ROOT
+  ROUTE_ROOT,
+  ROUTE_WELCOME
 } from './path'
 
 const Routers = () => {
   return (
-    <Routes>
+    <Routes location={location}>
       <Route path={ROUTE_CREATE} element={<CreateWallet />}></Route>
       <Route path={ROUTE_EXPORT} element={<ExportWallet />}></Route>
       <Route path={ROUTE_BACKUP} element={<Backup />}></Route>
@@ -30,6 +32,7 @@ const Routers = () => {
         path={ROUTE_BACKUP_MNEMONIC_VERIFY}
         element={<VerifyMnemonic />}
       ></Route>
+      <Route path={ROUTE_WELCOME} element={<Welcome />}></Route>
       <Route path={ROUTE_ROOT} element={<Layout />}>
         <Route path={ROUTE_HOME} element={<Home />}></Route>
       </Route>

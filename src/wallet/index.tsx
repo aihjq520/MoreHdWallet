@@ -13,7 +13,7 @@ class WalletApi {
       walletName
     }
     const menmonic = generateMnemonic()
-    HdWallet.fromMnemonic(menmonic, password, meta)
+    await HdWallet.fromMnemonic(menmonic, password, meta)
     const deriveParams = COIN_INFO.find(
       (item) => item.coin === 'FILECOIN' && item.network === NetWork.Main //todo币种不能写死
     )

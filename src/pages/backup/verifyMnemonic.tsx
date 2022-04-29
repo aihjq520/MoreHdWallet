@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { Button } from 'antd-mobile'
+import { Button, Toast } from 'antd-mobile'
 import { CloseCircleFill } from 'antd-mobile-icons'
 import TNavBar from 'components/TNavBar'
+import Prompt from 'components/TNavBar/Prompt'
+import TToast from 'components/TToast'
 
 const VerifyMnemonic = () => {
-  const list = [
+  const source = [
     'antenna',
     'trend',
     'lounge',
@@ -20,51 +23,95 @@ const VerifyMnemonic = () => {
     'parrot'
   ]
 
+  const [random, setRandom] = useState<string[]>([])
+
+  useEffect(() => {
+    setRandom(
+      source.slice(0).sort(() => {
+        return 0.5 - Math.random()
+      })
+    )
+  }, [])
+
   const [active, setActive] = useState<string[]>([])
+  const [visible, setVisible] = useState(false)
 
   const onSelect = (item: string) => {
-    setActive((v) => (v.includes(item) ? v : v.concat([item])))
+    setActive((v) => [...v, item])
   }
 
+  useEffect(() => {
+    if (active.join('') !== source.slice(0, active.length).join('')) {
+      setVisible(true)
+      return
+    }
+    setVisible(false)
+  }, [active, source])
+
+  const navigate = useNavigate()
+
   const onBtnClick = () => {
-    console.log(1)
+    TToast.successToast('备份成功')
+    setTimeout(() => {
+      navigate(-3)
+    }, 1500)
   }
+
+  const onDeleteItem = (index: number) => {
+    setActive((v) => v.filter((_, i) => i !== index))
+  }
+
+  const isTrue = useCallback(() => {
+    return source.join('') === active.join('')
+  }, [active, source])
 
   return (
     <>
+      <Prompt visible={visible} color="error">
+        助记词顺序不正确，请校对！
+      </Prompt>
       <TNavBar></TNavBar>
       <div className="px-8 pt-12 w-screen h-screen">
         <div className="pt-2 text-lg font-semibold">确认助记词</div>
         <div className="pt-1 text-gray-400">
           请按顺序点击助记词，以确认您正确备份。
         </div>
-        <div className="pb-2 pl-2 h-60 break-all bg-gray-100 rounded-lg border-2">
-          {active.map((m) => (
-            <span
+        <div className="pb-2 pl-2 mt-8 min-h-40 break-all bg-gray-100 rounded-lg border-2">
+          {active.map((m, i) => (
+            <Button
               key={m}
-              className="inline-block relative p-2 mt-2 mr-2 text-base text-gray-900 rounded-lg border"
+              className="relative mt-2 mr-2 text-base text-gray-900 bg-white"
+              style={{ '--border-radius': '0.5rem' }}
+              onClick={() => onDeleteItem(i)}
             >
-              <CloseCircleFill className="absolute top-0 right-0 text-sm text-red-600" />
+              <CloseCircleFill className="absolute -top-1 -right-1 text-sm text-red-500" />
               {m}
-            </span>
+            </Button>
           ))}
         </div>
         <div className="flex flex-wrap my-8">
-          {list.map((m) => (
-            <div
+          {random.map((m) => (
+            <Button
               key={m}
-              className={`p-2 mt-2 mr-2 text-base text-gray-900 rounded-lg border ${
+              className={`mt-2 mr-2 text-base text-gray-900 ${
                 active.includes(m) ? 'border-gray-100 text-gray-100' : ''
               }`}
+              style={{ '--border-radius': '0.5rem' }}
+              disabled={active.includes(m)}
               onClick={() => onSelect(m)}
             >
               {m}
-            </div>
+            </Button>
           ))}
         </div>
         <div className="fixed bottom-8 left-0 px-8 w-full">
-          <Button block color="primary" onClick={() => onBtnClick()}>
-            下一步
+          <Button
+            block
+            color="primary"
+            disabled={!isTrue()}
+            onClick={() => onBtnClick()}
+          >
+            完成备份
           </Button>
         </div>
       </div>
