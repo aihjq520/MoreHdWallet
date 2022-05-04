@@ -1,6 +1,5 @@
 import react from '@vitejs/plugin-react'
 
-import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'

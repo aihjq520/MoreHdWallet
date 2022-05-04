@@ -38,6 +38,7 @@
     "ethereumjs-wallet": "^1.0.2",
     "events": "^3.3.0",
     "file-saver": "^2.0.5",
+    "filecoin.js": "^0.0.5-alpha",
     "mobx": "^6.3.10",
     "mobx-react": "^7.2.1",
     "process": "^0.11.10",

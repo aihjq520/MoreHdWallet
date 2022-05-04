@@ -16,7 +16,7 @@ const Welcome = () => {
   useEffect(() => {
     const asyncFn = async () => {
       const account = await AccountStore.getAccount()
-      if (account) {
+      if (account && account.length > 0) {
         navigate(ROUTE_ROOT, { replace: true })
       }
     }
